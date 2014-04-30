@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>California Big Fires</title>
+        <title>Drought cycles</title>
 
 		<style type="text/css">
 			svg {
@@ -16,28 +16,6 @@
 			    shape-rendering: crispEdges;
 			}
 
-			.browser text {
-  				text-anchor: end;
-			}
-
-			.nothing {
-				fill: #cccccc;
-			}
-			.d0 {
-				fill: #ffff00;
-			}
-			.d1{
-				fill:#ffcc66;
-			}
-			.d2 {
-				fill:#ff9900;
-			}
-			.d3 {
-				fill:#cc3300;
-			}
-			.d4 {
-				fill: #660000;
-			}
 			.box{
 				height:15px;
 				width:50px;
@@ -59,6 +37,42 @@
 			}
 			.d4 {
 				background-color: #660000;
+			}
+
+			.drought:hover{
+				opacity: .4;
+    		}
+
+			/* tooltip */
+			.d3-tip {
+			  font-family: arial;
+			  font-size: 11px;
+			  line-height: 1;
+			  font-weight: bold;
+			  padding: 12px;
+			  background: rgba(0, 0, 0, 0.8);
+			  color: #fff;
+			  border-radius: 2px;
+			}
+
+			/* Creates a small triangle extender for the tooltip */
+			.d3-tip:after {
+			  box-sizing: border-box;
+			  display: inline;
+			  font-size: 10px;
+			  width: 100%;
+			  line-height: 1;
+			  color: rgba(0, 0, 0, 0.8);
+			  content: "\25BC";
+			  position: absolute;
+			  text-align: center;
+			}
+
+			/* Style northward tooltips differently */
+			.d3-tip.n:after {
+			  margin: -1px 0 0 0;
+			  top: 100%;
+			  left: 0;
 			}
 
 			/*
@@ -117,7 +131,22 @@
 			var y = d3.scale.linear()
 			    .range([height, 0]);
 
-			var color = d3.scale.category20();
+			//var color = d3.scale.category20();
+
+			var color = d3.scale.ordinal()
+				.domain([ "Nothing", 
+						  "D0", 
+						  "D1", 
+						  "D2", 
+						  "D3", 
+						  "D4"])
+				.range(['rgb(102,0,0)',
+						'rgb(204,51,0)', 
+						'rgb(255,152,0)', 
+						'rgb(255,204,102)',
+						'rgb(255,255,0)',
+						'rgb(255,255,255)'
+						]); 
 
 			var xAxis = d3.svg.axis()
 				.scale(x)
@@ -142,14 +171,16 @@
 			  .append("g")
 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-			d3.csv("drought.csv", function(error, data) {
+			d3.csv("drought2.csv", function(error, data) {
 			  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "Week"; }));
 
 				data.forEach(function(d) {
 					d.Week = parseDate(d.Week);
 				});
 
-			console.log(data)
+			// data.sort(function(a,b) {
+			// 	return a.values - b.values;
+			// });
 
 			  var drought = stack(color.domain().map(function(name) {
 			    return {
@@ -167,24 +198,20 @@
 			    .enter().append("g")
 			      .attr("class", "drought");
 
-			 //    .classed("nothing", function(d){ return d.Nothing })
-				// .classed("d0", function(d){ return d.D0 })
-			 //    .classed("d1", function(d){ return d.D1 })
-				// .classed("d2", function(d){ return d.D2})
-				// .classed("d3", function(d){ return d.D3 })
-				// .classed("d4", function(d){ return d.D4 });
-
 			  drought.append("path")
 			      .attr("class", "area")
 			      .attr("d", function(d) { return area(d.values); })
 			      .style("fill", function(d) { return color(d.name); });
 
+			/*
 			  drought.append("text")
 			      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+			      .attr("class","label")
 			      .attr("transform", function(d) { return "translate(" + x(d.value.Week) + "," + y(d.value.y0 + d.value.y / 2) + ")"; })
 			      .attr("x", -6)
 			      .attr("dy", ".35em")
 			      .text(function(d) { return d.name; });
+			*/
 
 			  svg.append("g")
 			      .attr("class", "x axis")

@@ -16,12 +16,14 @@
 			    shape-rendering: crispEdges;
 			}
 
-			.box{
+/*			.box{
 				height:15px;
 				width:50px;
-			}
+				float:left;
+				margin-left: 35px;
+			}*/
 			.nothing {
-				background-color: #cccccc;
+				background-color: #ffffff;
 			}
 			.d0 {
 				background-color: #ffff00;
@@ -40,8 +42,42 @@
 			}
 
 			.drought:hover{
-				opacity: .4;
+				opacity: .6;
     		}
+
+    		.legend-title {
+			    text-align: left;
+			    margin-bottom: 8px;
+			    font-weight: bold;
+			    font-size: 90%;
+		    }
+		    .legend-scale ul {
+			    margin: 0;
+			    padding: 0;
+			    float: left;
+			    list-style: none;
+		    }
+		    .legend-scale ul li {
+			    display: block;
+			    float: left;
+			    width: 70px;
+			    margin-bottom: 6px;
+			    text-align: center;
+			    font-size: 80%;
+			    list-style: none;
+		    }
+		    ul.legend-labels li span {
+			    display: block;
+			    float: left;
+			    height: 15px;
+			    width: 70px;
+			    border: 1px solid gray;
+		    }
+		    .legend-source {
+			    font-size: 70%;
+			    color: #999;
+			    clear: both;
+		    }
 
 			/* tooltip */
 			.d3-tip {
@@ -115,12 +151,12 @@
         <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 
     </head>
-    <body>		
+    <body>
         <script type="text/javascript">
 					
 			var margin = {top: 20, right: 20, bottom: 30, left: 50},
-			    width = 960 - margin.left - margin.right,
-			    height = 500 - margin.top - margin.bottom;
+			    width = 700 - margin.left - margin.right,
+			    height = 365 - margin.top - margin.bottom;
 
 			var parseDate = d3.time.format("%m/%d/%Y").parse,
 				formatPercent = d3.format(".0%");
@@ -227,15 +263,24 @@
 
         </script>
 
-        <div class="scale">
-        	<h2>Scale</h2>
-        	<p>Nothing</p><div class="box nothing"></div>
-        	<p>D0 Abnormally Dry</p><div class="box d0"></div>
-        	<p>D1 Moderate Drought</p><div class="box d1"></div>
-        	<p>D2 Severe Drought</p><div class="box d2"></div>
-        	<p>D3 Extreme Drought</p><div class="box d3"></div>
-        	<p>D4 Exceptional Drought</p><div class="box d4"></div>
-        </div>
+        <div class="legend-title">Legend</div>
+        <div class='legend-scale'>
+
+        <ul class="legend-labels">
+        	<li><span class="nothing"></span>Nothing</li>
+
+        	<li><span class="d0"></span>D0<br/>Abnormally Dry</li>
+         
+			<li><span class="d1"></span>D1<br/>Moderate Drought</li>
+
+        	<li><span class="d2"></span>D2<br/>Severe Drought</li>
+    
+        	<li><span class="d3"></span>D3<br/>Extreme Drought</li>
+    
+        	<li><span class="d4"></span>D4<br/>Exceptional Drought</li>
+        </ul>
+
+    </div>
 
 
 

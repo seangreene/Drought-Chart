@@ -15,100 +15,16 @@
 			    stroke: #000;
 			    shape-rendering: crispEdges;
 			}
-
-			.nothing {
-				background-color: #ffffff;
-			}
-			.d0 {
-				background-color: #ffff00;
-			}
-			.d1{
-				background-color:#ffcc66;
-			}
-			.d2 {
-				background-color:#ff9900;
-			}
-			.d3 {
-				background-color:#cc3300;
-			}
-			.d4 {
-				background-color: #660000;
+			.axis text {
+			    font-family: arial;
+			    font-size: 11px;
 			}
 
-			.drought:hover{
-				opacity: .6;
-    		}
-
-    		.legend-title {
-			    text-align: left;
-			    margin-bottom: 8px;
-			    font-weight: bold;
-			    font-size: 90%;
-		    }
-		    .legend-scale ul {
-			    margin: 0;
-			    padding: 0;
-			    float: left;
-			    list-style: none;
-		    }
-		    .legend-scale ul li {
-			    display: block;
-			    float: left;
-			    width: 70px;
-			    margin-bottom: 6px;
-			    text-align: center;
-			    font-size: 80%;
-			    list-style: none;
-		    }
-		    ul.legend-labels li span {
-			    display: block;
-			    float: left;
-			    height: 15px;
-			    width: 70px;
-			    border: 1px solid gray;
-		    }
-		    .legend-source {
-			    font-size: 70%;
-			    color: #999;
-			    clear: both;
-		    }
-
-			/* tooltip */
-			.d3-tip {
-			  font-family: arial;
-			  font-size: 11px;
-			  line-height: 1;
-			  font-weight: bold;
-			  padding: 12px;
-			  background: rgba(0, 0, 0, 0.8);
-			  color: #fff;
-			  border-radius: 2px;
-			}
-
-			/* Creates a small triangle extender for the tooltip */
-			.d3-tip:after {
-			  box-sizing: border-box;
-			  display: inline;
-			  font-size: 10px;
-			  width: 100%;
-			  line-height: 1;
-			  color: rgba(0, 0, 0, 0.8);
-			  content: "\25BC";
-			  position: absolute;
-			  text-align: center;
-			}
-
-			/* Style northward tooltips differently */
-			.d3-tip.n:after {
-			  margin: -1px 0 0 0;
-			  top: 100%;
-			  left: 0;
-			}
 
 		</style>
 		
-        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+        <script src="js/d3.min.js" charset="utf-8"></script>
+
 
     </head>
     <body>
@@ -118,7 +34,7 @@
 			    width = 700 - margin.left - margin.right,
 			    height = 300 - margin.top - margin.bottom;
 
-			var parseDate = d3.time.format("%m/%d/%Y").parse,
+			var parseDate = d3.time.format("%m/%d/%y").parse,
 				formatPercent = d3.format(".0%");
 
 			var x = d3.time.scale()
@@ -145,6 +61,7 @@
 						]); 
 
 			var xAxis = d3.svg.axis()
+			    .tickFormat(d3.time.format("%Y"))
 				.scale(x)
 				.orient("bottom");
 
@@ -176,10 +93,6 @@
 					d.Week = parseDate(d.Week);
 				});
 
-			// data.sort(function(a,b) {
-			// 	return a.values - b.values;
-			// });
-
 			  var drought = stack(color.domain().map(function(name) {
 			    return {
 			      name: name,
@@ -201,16 +114,6 @@
 			      .attr("d", function(d) { return area(d.values); })
 			      .style("fill", function(d) { return color(d.name); });
 
-			/*
-			  drought.append("text")
-			      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-			      .attr("class","label")
-			      .attr("transform", function(d) { return "translate(" + x(d.value.Week) + "," + y(d.value.y0 + d.value.y / 2) + ")"; })
-			      .attr("x", -6)
-			      .attr("dy", ".35em")
-			      .text(function(d) { return d.name; });
-			*/
-
 			  svg.append("g")
 			      .attr("class", "x axis")
 			      .attr("transform", "translate(0," + height + ")")
@@ -224,28 +127,6 @@
 
 
         </script>
-
-        <div class="legend-title">Legend</div>
-        <div class='legend-scale'>
-
-        <ul class="legend-labels">
-        	<li><span class="nothing"></span>Nothing</li>
-
-        	<li><span class="d0"></span>D0<br/>Abnormally Dry</li>
-         
-			<li><span class="d1"></span>D1<br/>Moderate Drought</li>
-
-        	<li><span class="d2"></span>D2<br/>Severe Drought</li>
-    
-        	<li><span class="d3"></span>D3<br/>Extreme Drought</li>
-    
-        	<li><span class="d4"></span>D4<br/>Exceptional Drought</li>
-        </ul>
-
-    	</div>
-
-
-
 
     </body>
 </html>
